@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
     participant user
     participant browser
@@ -11,7 +12,7 @@ sequenceDiagram
     server-->>browser: HTTP 302, Location:/notes
     deactivate server
  
-    note right of browser: asks for a new HTTP GET request to the address defined in the header's Location 
+    note right of browser: Server asks for a new HTTP GET request to the address defined in the header's Location 
 
     browser->>user: Reloads the page
     deactivate browser
@@ -37,3 +38,4 @@ sequenceDiagram
     deactivate server
 
     user->>browser: Looks happily at his note appearing on the list
+```
