@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import PersonForm from './components/PersonForm'
 
 const Filter = ({filter, setFilter}) => {
   const handleFilterChange = (event) => {
@@ -11,49 +13,6 @@ const Filter = ({filter, setFilter}) => {
         value={filter}
         onChange={handleFilterChange}
       />
-    </form>
-  )
-}
-
-const PersonForm = ({persons, setPersons, newName, setNewName, newPhone, setNewPhone}) => {
-  const addPerson = (event) => {
-    event.preventDefault()
-
-    if (persons.find(p => p.name === newName)) {
-      alert(`${newName}is already added to phonebook`)
-    }
-    else {
-      const person = {
-        name: newName,
-        number: newPhone
-      }
-      setPersons(persons.concat(person))
-      setNewName('')
-      setNewPhone('')
-    }
-  }
-
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
-  const handlePhoneChange = (event) => {
-    setNewPhone(event.target.value)
-  }
-
-  return (
-    <form onSubmit={addPerson} >
-      <div>
-        name: <input 
-          value={newName} 
-          onChange={handleNameChange} />
-      </div>
-      <div>
-        number: <input
-          value={newPhone}
-          onChange={handlePhoneChange}
-        />
-      </div>
-      <div><button type="submit">add</button></div>
     </form>
   )
 }
@@ -72,15 +31,19 @@ const Persons = ({persons, filterString}) => {
 }
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filterString, setFilterString] = useState('')
+
+  useEffect(() =>{
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        console.log(response.data)
+        setPersons(response.data)
+      })
+  }, [])
 
   return (
     <div>
